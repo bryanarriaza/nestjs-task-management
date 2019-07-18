@@ -15,6 +15,12 @@ export class TasksController {
         return this.tasksService.getTaskById(id);
     }
 
+    @Post()
+    @UsePipes(ValidationPipe)
+    createTask(@Body() createTaskDTO: CreateTaskDTO): Promise<Task> {
+        return this.tasksService.createTask(createTaskDTO);
+    }
+
     /*
         @Get()
         getTasks(@Query(ValidationPipe) filterDTO: GetTasksFilterDTO): Task[] {
@@ -23,14 +29,6 @@ export class TasksController {
             } else {
                 return this.tasksService.getAllTasks();
             }
-        }
-
-
-
-        @Post()
-        @UsePipes(ValidationPipe)
-        createTask(@Body() createTaskDTO: CreateTaskDTO): Task {
-            return this.tasksService.createTask(createTaskDTO);
         }
 
         @Patch('/:id/status')
