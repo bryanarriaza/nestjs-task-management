@@ -16,6 +16,11 @@ export class TasksController {
         return this.tasksService.getTaskById(id);
     }
 
+    @Get()
+    getTasks(@Query(ValidationPipe) filterDTO: GetTasksFilterDTO): Promise<Task[]> {
+        return this.tasksService.getTasks(filterDTO);
+    }
+
     @Post()
     @UsePipes(ValidationPipe)
     createTask(@Body() createTaskDTO: CreateTaskDTO): Promise<Task> {
@@ -31,20 +36,5 @@ export class TasksController {
     updateTaskStatus(@Param('id', ParseIntPipe) id: number, @Body('status', TaskStatusValidationPipe) status: TaskStatus): Promise<Task> {
         return this.tasksService.updateTaskStatus(id, status);
     }
-
-    /*
-        @Get()
-        getTasks(@Query(ValidationPipe) filterDTO: GetTasksFilterDTO): Task[] {
-            if (Object.keys(filterDTO).length) {
-                return this.tasksService.getTasksWithFilters(filterDTO);
-            } else {
-                return this.tasksService.getAllTasks();
-            }
-        }
-
-
-
-
-    */
 
 }

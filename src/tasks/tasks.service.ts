@@ -21,6 +21,10 @@ export class TasksService {
         return found;
     }
 
+    async getTasks(filterDto: GetTasksFilterDTO): Promise<Task[]> {
+        return this.taskRepository.getTasks(filterDto);
+    }
+
     async createTask(createTaskDTO: CreateTaskDTO): Promise<Task> {
         return this.taskRepository.createTask(createTaskDTO);
     }
@@ -39,23 +43,4 @@ export class TasksService {
         return task;
     }
 
-    /*
-        private tasks: Task[] = [];
-        getAllTasks(): Task[] {
-            return this.tasks;
-        }
-
-        getTasksWithFilters(filterDTO: GetTasksFilterDTO): Task[] {
-            const { status, search } = filterDTO;
-            let tasks = this.getAllTasks();
-            if (status) {
-                tasks = tasks.filter(task => task.status === status);
-            }
-            if (search) {
-                tasks = tasks.filter(task => task.title.includes(search) || task.description.includes(search));
-            }
-            return tasks;
-        }
-
-    */
 }
