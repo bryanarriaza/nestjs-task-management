@@ -25,6 +25,13 @@ export class TasksService {
         return this.taskRepository.createTask(createTaskDTO);
     }
 
+    async deleteTask(id: number): Promise<void> {
+        const result = await this.taskRepository.delete(id);
+        if (result.affected === 0) {
+            throw new NotFoundException(`Task with ID: ${id} can't be delete because doesn't exist!`);
+        }
+    }
+
     /*
         private tasks: Task[] = [];
         getAllTasks(): Task[] {
@@ -49,10 +56,5 @@ export class TasksService {
             return task;
         }
 
-        deleteTask(id: string): Task[] {
-            const found = this.getTaskById(id);
-            this.tasks = this.tasks.filter(task => task.id !== found.id);
-            return this.tasks;
-        }
     */
 }
