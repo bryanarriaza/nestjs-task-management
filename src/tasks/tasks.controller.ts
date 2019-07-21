@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Patch, Query, UsePipes, ValidationPipe, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Patch, Query, UsePipes, ValidationPipe, ParseIntPipe, UseGuards, Logger } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { TasksService } from './tasks.service';
 import { TaskStatusValidationPipe } from './pipes/task-status-validation.pipe';
@@ -13,6 +13,7 @@ import { GetUser } from '../auth/get-user.decorator';
 @UseGuards(AuthGuard())
 export class TasksController {
 
+    private readonly logger: Logger = new Logger('TasksController');
     constructor(private readonly tasksService: TasksService) { }
 
     @Get('/:id')
@@ -28,6 +29,7 @@ export class TasksController {
         @Query(ValidationPipe) filterDTO: GetTasksFilterDTO,
         @GetUser() user: User,
     ): Promise<Task[]> {
+        this.logger.verbose(`User "${user.username}" retrieving all tasks. Filters: ${JSON.stringify(filterDTO)}`);
         return this.tasksService.getTasks(filterDTO, user);
     }
 
@@ -37,6 +39,7 @@ export class TasksController {
         @Body() createTaskDTO: CreateTaskDTO,
         @GetUser() user: User,
     ): Promise<Task> {
+        this.logger.verbose(`User "${user.username}" creating a new task. Data: ${JSON.stringify(createTaskDTO)}`);
         return this.tasksService.createTask(createTaskDTO, user);
     }
 
@@ -44,7 +47,7 @@ export class TasksController {
     deleteTask(
         @Param('id', ParseIntPipe) id: number,
         @GetUser() user: User,
-        ): Promise<void> {
+    ): Promise<void> {
         return this.tasksService.deleteTask(id, user);
     }
 
